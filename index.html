@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع عرض الصور ورفعها</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+        }
+        .image-gallery {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .image-item {
+            margin: 10px;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+        }
+        .admin-panel {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>عرض الصور المرفوعة</h1>
+
+    <div class="image-gallery">
+        <!-- عرض الصور المرفوعة من المجلد -->
+        <?php
+        $dir = 'uploads/';
+        if (is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.', '..'));
+            foreach ($files as $file) {
+                $filePath = $dir . $file;
+                // عرض الصورة فقط إذا كان نوع الملف هو صورة
+                if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $file)) {
+                    echo "<div class='image-item'>";
+                    echo "<img src='$filePath' alt='Image'>";
+                    echo "</div>";
+                }
+            }
+        }
+        ?>
+    </div>
+
+    <div class="admin-panel">
+        <h2>لوحة التحكم - إضافة صورة</h2>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required><br><br>
+            <button type="submit">رفع الصورة</button>
+        </form>
+    </div>
+
+</body>
+</html>
